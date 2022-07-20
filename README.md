@@ -634,17 +634,17 @@ services:
 
 <pre>[user@localhost docker]$ docker compose up -d
 [+] Running 8/8
- ⠿ alp-php-fpm Pulled                                                                                                                           6.2s
-   ⠿ 394312e73205 Pull complete                                                                                                                 1.8s
-   ⠿ 2f06c2ab3713 Pull complete                                                                                                                 2.4s
-   ⠿ e7df9115b91e Pull complete                                                                                                                 2.5s
- ⠿ alpine-nginx Pulled                                                                                                                          5.0s
-   ⠿ 530afca65e2e Pull complete                                                                                                                 1.2s
-   ⠿ ade6a6a16693 Pull complete                                                                                                                 1.3s
-   ⠿ e5c776b3d0d0 Pull complete                                                                                                                 1.4s
+ ⠿ alp-php-fpm Pulled                                                      6.2s
+   ⠿ 394312e73205 Pull complete                                            1.8s
+   ⠿ 2f06c2ab3713 Pull complete                                            2.4s
+   ⠿ e7df9115b91e Pull complete                                            2.5s
+ ⠿ alpine-nginx Pulled                                                     5.0s
+   ⠿ 530afca65e2e Pull complete                                            1.2s
+   ⠿ ade6a6a16693 Pull complete                                            1.3s
+   ⠿ e5c776b3d0d0 Pull complete                                            1.4s
 [+] Running 2/2
- ⠿ Container docker-alp-php-fpm-1   Started                                                                                                     0.7s
- ⠿ Container docker-alpine-nginx-1  Started                                                                                                     0.9s
+ ⠿ Container docker-alp-php-fpm-1   Started                                0.7s
+ ⠿ Container docker-alpine-nginx-1  Started                                0.9s
 [user@localhost docker]$</pre>
 
 <p>В адресной строке браузера вводим 127.0.0.1 и получаем страницу phpinfo:</p>
