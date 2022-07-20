@@ -109,21 +109,21 @@ server {
 
 <pre>[user@localhost ansible]$ vi ./index.html</pre>
 
-<pre><!DOCTYPE html>
-<html>
-<head>
-<title>My Web Page</title>
-<style>
+<pre>&#60;!DOCTYPE html&#62;
+&#60;html&#62;
+&#60;head&#62;
+&#60;title&#62;My Web Page&#60;/title&#62;
+&#60;style&#62;
 html { color-scheme: light dark; }
 body { width: 35em; margin: 0 auto;
 font-family: Tahoma, Verdana, Arial, sans-serif; }
-</style>
-</head>
-<body>
-<h1>Welcome to my web page!</h1>
-<p>This my web page from alpine-nginx docker.</p>
-</body>
-</html></pre>
+&#60;/style&#62;
+&#60;/head&#62;
+&#60;body&#62;
+&#60;h1&#62;Welcome to my web page!&#60;/h1&#62;
+&#60;p&#62;This my web page from alpine-nginx docker.&#60;/p&#62;
+&#60;/body&#62;
+&#60;/html&#62;</pre>
 
 <p>Создаём образ с названием alpinx (сокращенное ALPine-ngINX):</p>
 
