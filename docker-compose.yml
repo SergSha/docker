@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  alp-php-fpm:
+    image: sergsha/alp-php-fpm
+    volumes:
+      - ./html:/var/lib/nginx/html
+
+  alpine-nginx:
+    image: sergsha/alpinx
+    volumes:
+      - ./html:/var/lib/nginx/html
+    ports:
+      - "80:80"
+    links:
+      - alp-php-fpm
