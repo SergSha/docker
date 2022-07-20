@@ -610,7 +610,7 @@ latest: digest: sha256:d491ceb6c1aa230e782640764047cf3c3e0d12e73569752b90f412e51
 <pre>version: '3'
 
 services:
-  alp-php-fpm:
+  php-fpm:
     image: sergsha/alp-php-fpm
     volumes:
       - ./html:/var/lib/nginx/html
@@ -622,7 +622,7 @@ services:
     ports:
       - "80:80"
     links:
-      - alp-php-fpm</pre>
+      - php-fpm</pre>
 
 <p>Создадим веб-страницу phpinfo index.php:</p>
 
@@ -632,5 +632,21 @@ services:
 
 <p>Запустим docker-compose в фоновом режиме:</p>
 
-<pre>[user@localhost docker]$ docker compose up -d</pre>
+<pre>[user@localhost docker]$ docker compose up -d
+[+] Running 8/8
+ ⠿ alp-php-fpm Pulled                                                                                                                           6.2s
+   ⠿ 394312e73205 Pull complete                                                                                                                 1.8s
+   ⠿ 2f06c2ab3713 Pull complete                                                                                                                 2.4s
+   ⠿ e7df9115b91e Pull complete                                                                                                                 2.5s
+ ⠿ alpine-nginx Pulled                                                                                                                          5.0s
+   ⠿ 530afca65e2e Pull complete                                                                                                                 1.2s
+   ⠿ ade6a6a16693 Pull complete                                                                                                                 1.3s
+   ⠿ e5c776b3d0d0 Pull complete                                                                                                                 1.4s
+[+] Running 2/2
+ ⠿ Container docker-alp-php-fpm-1   Started                                                                                                     0.7s
+ ⠿ Container docker-alpine-nginx-1  Started                                                                                                     0.9s
+[user@localhost docker]$</pre>
 
+<p>В адресной строке браузера вводим 127.0.0.1 и получаем страницу phpinfo:</p>
+
+![image](https://user-images.githubusercontent.com/96518320/180057007-6d82aeb5-805c-4e06-aa38-7081437247d5.png)
