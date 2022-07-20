@@ -432,7 +432,7 @@ CONTAINER ID   IMAGE     COMMAND                  CREATED         STATUS        
 
 <p>Наблюдаем созданную нами веб-страницу, используя докер с nginx.</p>
 
-<br />
+
 
 <h4>Определите разницу между контейнером и образом.</h4>
 
@@ -440,4 +440,197 @@ CONTAINER ID   IMAGE     COMMAND                  CREATED         STATUS        
 
 <p>Контейнер это своего рода запущенный с образа изолированный процесс (сервис), который выполняет определенную функцию. Используя один и тот же образ можно запустить несколько контейнеров.</p>
 
+
+
+<h4>Задание со * (звездочкой).</h4>
+
+<p>Создадим образы nginx и php на базе alpine.</p>
+
+<p>Dockerfile alpine + nginx - alpinx:</p>
+
+<pre>[user@localhost docker]$ vi ./nginx/Dockerfile</pre>
+
+<pre>FROM alpine
+LABEL mainteiner="SergSha"
+RUN apk add --update --no-cache nginx && mkdir -p /run/nginx
+COPY ./nginx/default.conf /etc/nginx/http.d/default.conf
+EXPOSE 80
+CMD ["nginx","-g","daemon off;"]</pre>
+
+<p>Dockerfile alpine + php-fpm - alp-php-fpm:</p>
+
+<pre>[user@localhost docker]$ vi ./php-fpm/Dockerfile</pre>
+
+<pre>FROM alpine
+LABEL mainteiner="SergSha"
+RUN apk add --update --no-cache php-fpm
+RUN mkdir -p /var/lib/nginx/html
+RUN sed -i "s/listen = 127.0.0.1:9000/listen = [::]:9000/" /etc/php8/php-fpm.d/www.conf
+EXPOSE 9000
+CMD ["php-fpm8","-F"]</pre>
+
+<p>Образ alpinx (alpine + nginx):</p>
+
+<pre>[user@localhost docker]$ docker build -t sergsha/alpinx -f ./nginx/Dockerfile .
+Sending build context to Docker daemon  9.216kB
+Step 1/6 : FROM alpine
+latest: Pulling from library/alpine
+530afca65e2e: Pull complete 
+Digest: sha256:7580ece7963bfa863801466c0a488f11c86f85d9988051a9f9c68cb27f6b7872
+Status: Downloaded newer image for alpine:latest
+ ---> d7d3d98c851f
+Step 2/6 : LABEL mainteiner="SergSha"
+ ---> Running in a01248542db6
+Removing intermediate container a01248542db6
+ ---> d2e56fb32420
+Step 3/6 : RUN apk add --update --no-cache nginx && mkdir -p /run/nginx
+ ---> Running in 8b33c11bc2c1
+fetch https://dl-cdn.alpinelinux.org/alpine/v3.16/main/x86_64/APKINDEX.tar.gz
+fetch https://dl-cdn.alpinelinux.org/alpine/v3.16/community/x86_64/APKINDEX.tar.gz
+(1/2) Installing pcre (8.45-r2)
+(2/2) Installing nginx (1.22.0-r1)
+Executing nginx-1.22.0-r1.pre-install
+Executing nginx-1.22.0-r1.post-install
+Executing busybox-1.35.0-r15.trigger
+OK: 7 MiB in 16 packages
+Removing intermediate container 8b33c11bc2c1
+ ---> 7663f8756f6a
+Step 4/6 : COPY ./nginx/default.conf /etc/nginx/http.d/default.conf
+ ---> 7800c89bd012
+Step 5/6 : EXPOSE 80
+ ---> Running in 2b30ea762335
+Removing intermediate container 2b30ea762335
+ ---> be5e3eef95a8
+Step 6/6 : CMD ["nginx","-g","daemon off;"]
+ ---> Running in 8de301b9a634
+Removing intermediate container 8de301b9a634
+ ---> b099281044ce
+Successfully built b099281044ce
+Successfully tagged sergsha/alpinx:latest
+[user@localhost docker]$</pre>
+
+<p>Образ alp-php-fpm (alpine + php-fpm):</p>
+
+<pre>[user@localhost docker]$ docker build -t sergsha/alp-php-fpm -f ./php-fpm/Dockerfile .
+Sending build context to Docker daemon  9.216kB
+Step 1/7 : FROM alpine
+ ---> d7d3d98c851f
+Step 2/7 : LABEL mainteiner="SergSha"
+ ---> Using cache
+ ---> d2e56fb32420
+Step 3/7 : RUN apk add --update --no-cache php-fpm
+ ---> Running in 99b0e39a37d5
+fetch https://dl-cdn.alpinelinux.org/alpine/v3.16/main/x86_64/APKINDEX.tar.gz
+fetch https://dl-cdn.alpinelinux.org/alpine/v3.16/community/x86_64/APKINDEX.tar.gz
+(1/9) Installing php8-common (8.0.21-r0)
+(2/9) Installing argon2-libs (20190702-r1)
+(3/9) Installing ncurses-terminfo-base (6.3_p20220521-r0)
+(4/9) Installing ncurses-libs (6.3_p20220521-r0)
+(5/9) Installing libedit (20210910.3.1-r0)
+(6/9) Installing pcre2 (10.40-r0)
+(7/9) Installing xz-libs (5.2.5-r1)
+(8/9) Installing libxml2 (2.9.14-r0)
+(9/9) Installing php8-fpm (8.0.21-r0)
+Executing busybox-1.35.0-r15.trigger
+OK: 17 MiB in 23 packages
+Removing intermediate container 99b0e39a37d5
+ ---> 4168159a4595
+Step 4/7 : RUN mkdir -p /var/lib/nginx/html
+ ---> Running in 85ad4484467d
+Removing intermediate container 85ad4484467d
+ ---> 87ddc3c4c7b0
+Step 5/7 : RUN sed -i "s/listen = 127.0.0.1:9000/listen = [::]:9000/" /etc/php8/php-fpm.d/www.conf
+ ---> Running in 1689c55eaea6
+Removing intermediate container 1689c55eaea6
+ ---> 815766dd72d1
+Step 6/7 : EXPOSE 9000
+ ---> Running in 95b25cca92f9
+Removing intermediate container 95b25cca92f9
+ ---> ee01a9df775d
+Step 7/7 : CMD ["php-fpm8","-F"]
+ ---> Running in 7e82d601f313
+Removing intermediate container 7e82d601f313
+ ---> 2a1da2638ff9
+Successfully built 2a1da2638ff9
+Successfully tagged sergsha/alp-php-fpm:latest
+[user@localhost docker]$</pre>
+
+<p>Список образов:</p>
+
+<pre>[user@localhost docker]$ docker images
+REPOSITORY            TAG       IMAGE ID       CREATED          SIZE
+sergsha/alp-php-fpm   latest    2a1da2638ff9   31 seconds ago   16.9MB
+sergsha/alpinx        latest    b099281044ce   2 minutes ago    6.98MB
+alpine                latest    d7d3d98c851f   44 hours ago     5.53MB
+[user@localhost docker]$</pre>
+
+<p>Здесь мы видим только что созданные нами образы sergsha/alpinx и sergsha/alp-php-fpm.</p>
+
+<p>Загрузим эти образы в DockerHub.<br />
+Для начала авторизуемся в DockerHub:</p>
+
+<pre>[user@localhost docker]$ docker login
+Login with your Docker ID to push and pull images from Docker Hub. If you don't have a Docker ID, head over to https://hub.docker.com to create one.
+Username: sergsha
+Password: 
+WARNING! Your password will be stored unencrypted in /home/user/.docker/config.json.
+Configure a credential helper to remove this warning. See
+https://docs.docker.com/engine/reference/commandline/login/#credentials-store
+
+Login Succeeded
+[user@localhost docker]$</pre>
+
+<p>Загружаем в DockerHub образ alpinx:</p>
+
+<pre>[user@localhost docker]$ docker push sergsha/alpinx
+Using default tag: latest
+The push refers to repository [docker.io/sergsha/alpinx]
+58df8d169c36: Pushed 
+5c949ef68ca3: Pushed 
+ec34fcc1d526: Mounted from library/alpine 
+latest: digest: sha256:470bbddcc56a9e6afa0c647e515375106603813e2d76050ec93222ad85a9c1c9 size: 945
+[user@localhost docker]$</pre>
+
+<p>Загружаем в DockerHub образ alp-php-fpm:</p>
+
+<pre>[user@localhost docker]$ docker push sergsha/alp-php-fpm
+Using default tag: latest
+The push refers to repository [docker.io/sergsha/alp-php-fpm]
+0dbcf6d630a4: Pushed 
+9888aa3817cd: Pushed 
+1ef5ba02d070: Pushed 
+ec34fcc1d526: Mounted from sergsha/alpinx 
+latest: digest: sha256:d491ceb6c1aa230e782640764047cf3c3e0d12e73569752b90f412e516e2f3b4 size: 1154
+[user@localhost docker]$</pre>
+
+<p>Создадим docker-compose.yml:</p>
+
+<pre>[user@localhost docker]$ vi ./docker-compose.yml</pre>
+
+<pre>version: '3'
+
+services:
+  alp-php-fpm:
+    image: sergsha/alp-php-fpm
+    volumes:
+      - ./html:/var/lib/nginx/html
+
+  nginx:
+    image: sergsha/alpinx
+    volumes:
+      - ./html:/var/lib/nginx/html
+    ports:
+      - "80:80"
+    links:
+      - alp-php-fpm</pre>
+
+<p>Создадим веб-страницу phpinfo index.php:</p>
+
+<pre>[user@localhost docker]$ vi ./html/index.php</pre>
+
+<pre><?php phpinfo(); ?></pre>
+
+<p>Запустим docker-compose в фоновом режиме:</p>
+
+<pre>[user@localhost docker]$ docker compose up -d</pre>
 
