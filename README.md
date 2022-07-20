@@ -628,7 +628,9 @@ services:
 
 <pre>[user@localhost docker]$ vi ./html/index.php</pre>
 
-<pre><\?php phpinfo(); \?></pre>
+<pre><?php 
+phpinfo(); 
+?></pre>
 
 <p>Запустим docker-compose в фоновом режиме:</p>
 
