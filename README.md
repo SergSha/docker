@@ -447,7 +447,7 @@ CONTAINER ID   IMAGE     COMMAND                  CREATED         STATUS        
 
 
 
-<h4>ЗЗадание со * (звездочкой). Создайте кастомные образы nginx и php, объедините их в docker-compose. После запуска nginx должен показывать php info. Все собранные образы должны быть в docker hub.</h4>
+<h4>Задание со * (звездочкой). Создайте кастомные образы nginx и php, объедините их в docker-compose. После запуска nginx должен показывать php info. Все собранные образы должны быть в docker hub.</h4>
 
 <p>Создадим образы nginx и php на базе alpine.</p>
 
